@@ -1,91 +1,49 @@
-# NOXTURN
+# NOXTURN: Power Plant NOx Emission Prediction
 
-### 📌 1. 프로젝트 주제
+### Background
 
-**발전소의 NOx 배출량 예측을 위한 외부 데이터 기반 머신러닝 모델 개발**
-(*공모전: 산업통상자원부 제13회 공공데이터 활용 아이디어 공모전*)
+* With rising electricity demand, emissions are also increasing, highlighting the need for effective reduction strategies.
+* Nitrogen oxides (NOx) is a major contributor to fine dust, crop damage, and acid rain, negatively impacting public health and industrial activities.
+* The emission sources in the energy sector are clearly identifiable and can be directly regulated through policy.
+* Targeted power plant is planning to be equipped with a digital operating system, and has consistently been listed among the top NOx-emitting facilities.
 
----
+### Project Objective
 
-### 🎯 2. 프로젝트 목적
-
-* 고가의 센서나 내부 제어 데이터 없이, **공공 외부 데이터만으로 발전소의 오염물질 배출(NOx)을 정량적으로 예측**
-* 디지털 전환이 미완료된 설비(예: 영흥본부 3·4호기)에도 적용 가능한 현실적인 저비용 환경 관리 모델 제시
-* 발전소 운영의 **ESG 대응과 환경 규제 리스크 완화**, **배출권 거래제 사전 대응** 기반 마련
-
----
-
-### 📊 3. Dataset and Key Variables
-
-* **공공데이터 출처:**
-
-  * 한국남동발전: 발전량, 가동시간, 유량, NOx, 산소 농도
-  * 전력거래소: 전국 전력수요량, 발전소별 거래량
-  * 기상청: 온도, 습도, 풍속 (결측치 보간용)
-* **주요 변수 (원본 + 파생):**
-
-  * 발전총량(MW), 가동시간, 온도\*습도(온도\_습도), 풍속²(풍속\_제곱)
-  * 유량(g), NOx(g) (ppm → g 단위 변환식 적용)
-  * 산소(산소\_ppm → 산소\_g)
+* Predict NOx emissions without internal sensored-data using only public external data
+* Provide a low-cost, practical model for plants
 
 ---
 
-### ⚙️ 4. Methodology
+### Dataset
 
-#### 🔹 데이터 전처리
+* **KOEN:** Generation, operating hours, flow, NOx, O₂
+* **KPX:** National demand, plant-level trading volume
+* **KMA:** Temperature, humidity, wind (for missing values)
 
-* 단위 통합: 모두 **일 단위**로 맞춤
-* NOx 농도를 질량 단위(g)로 환산
-* 기상정보 결측치 → 기상청 데이터로 보완
-* Train/Test 분할 후 상관관계 분석 수행
-* 유량은 NOx 예측에 직접 입력하지 않고, 별도의 **유량 예측 모델**을 통해 간접 반영
+### ⚙️ Methodology
 
-#### 🔹 자기상관성 분석 및 시계열 특징 반영
+* **Preprocessing:** Unit unification (daily), NOx conversion (ppm → g), missing value imputation
+* **Time-Series Analysis:** ACF (4-day autocorrelation), lag features, weekday/holiday effects
+* **Modeling:**
 
-* NOx 및 발전량 시계열에서 **자기상관성(ACF) 분석 결과, 4일까지 유의한 자기상관 존재**
-* 주기성 존재 확인 → **시계열 특징 (Time Features)** 적용
+  * Step 1: Flow prediction (`XGBoost`)
+  * Step 2: NOx prediction using predicted flow + weather + generation
+* **Optimization:** Hyperparameter tuning with `Optuna`
 
-  * 요일, 주말/평일, 전력 수요 증감 등 패턴 변수 추가
-  * 시계열 시프트 변수 (예: 전일 유량, 전일 발전량 등) 적용
+### 📈 Results
 
-#### 🔹 모델 설계
-
-* **2단계 모델링 구조**
-
-  1. 유량 예측 모델 → `XGBoostRegressor`
-  2. 예측된 유량 + 기상/발전 데이터 → NOx 예측
-* **모델 최적화**
-
-  * `Optuna`로 각 호기별 하이퍼파라미터 최적화
-  * 변수 간 다중공선성과 비선형성을 고려해 `XGBoost` 사용
-  * 평가 지표: RMSE, R²
-
-| 호기  | RMSE (g) | R² Score |
-| --- | -------- | -------- |
-| 3호기 | 504.52   | 0.9001   |
-| 4호기 | 492.65   | 0.8515   |
-| 5호기 | 219.48   | 0.9328   |
-| 6호기 | 282.72   | 0.9172   |
+| Unit | RMSE (g) | R²   |
+| ---- | -------- | ---- |
+| 3    | 504.52   | 0.90 |
+| 4    | 492.65   | 0.85 |
+| 5    | 219.48   | 0.93 |
+| 6    | 282.72   | 0.92 |
 
 ---
 
-### ✅ 5. Key Tasks
+### Key Contributions
 
-#### 사용자가 주도한 주요 분석 내용:
-
-* **데이터 통합 및 전처리**
-
-  * 여러 출처의 데이터를 날짜 단위로 통합
-  * 유량, NOx 단위 환산 및 이상치 정제
-* **시계열 분석 적용**
-
-  * ACF 분석 → 4일 자기상관 발견
-  * 주기성 → 요일/휴일 등 Time Feature 생성 및 적용
-  * 시프트된 시계열 변수 생성으로 예측 정확도 향상
-* **모델 개선**
-
-  * 유량 예측 모델 별도 분리
-  * 예측 유량을 입력으로 활용해 NOx 예측 정확도 향상
-  * 각 호기별로 모델 최적화 수행
-
----
+* Built integrated dataset from multiple public sources
+* Engineered **time features + lag variables** for higher accuracy
+* Designed a **two-step model** (Flow → NOx)
+* Improved model performance through **per-unit optimization**
