@@ -20,7 +20,15 @@
 * **KPX:** National demand, plant-level trading volume
 * **KMA:** Temperature, humidity, wind (for missing values)
 
-### ⚙️ Methodology
+### Workload
+
+1. 사업기획
+2. 데이터 분석
+3. 모델 설계(딥러닝, 머신러닝)
+
+### Main Tasks
+
+> **Responsible for "Data Analysis and Machine Learning Design"**
 
 * **Preprocessing:** Unit unification (daily), NOx conversion (ppm → g), missing value imputation
 * **Time-Series Analysis:** ACF (4-day autocorrelation), lag features, weekday/holiday effects
