@@ -22,21 +22,44 @@
 
 ### Workload
 
-1. 사업기획
-2. 데이터 분석
-3. 모델 설계(딥러닝, 머신러닝)
+1. **Project Planning and Data Collection** 
+
+   * Problem Definition & Research on Environmental Regulations and NOx Management
+   * Data Availability Assessment
+   * Data Collection
+   * Defining Data Requirements
+
+2. **Data Preprocessing and Exploratory Data Analysis (EDA)**
+
+   * Exploratory Data Analysis (EDA)
+   * Visual Insights Extraction
+   * Preprocessing
+   * Variable Definition
+
+3. **Model Development and Evaluation**
+
+   * Training Strategy and Model Design
+   * Baseline Model Development
+   * Performance Metric Calculation & Optimization
+   * Final Model Selection
+
+4. **Project Outcome and Presentation**
+
+   * Summarizing Analysis Results and Extracting Implications
+   * Organizing Utilization Strategies
+   * PPT Creation and Visual Material Preparation
 
 ### Main Tasks
 
-> **Responsible for "Data Analysis and Machine Learning Design"**
+> **Mainly responsible for Research on Environmental Regulations and NOx Management, EDA, Visual Insights Extraction, and Model Development and Evaluation**
 
-* **Preprocessing:** Unit unification (daily), NOx conversion (ppm → g), missing value imputation
-* **Time-Series Analysis:** ACF (4-day autocorrelation), lag features, weekday/holiday effects
-* **Modeling:**
+### Key Contributions
 
-  * Step 1: Flow prediction (`XGBoost`)
-  * Step 2: NOx prediction using predicted flow + weather + generation
-* **Optimization:** Hyperparameter tuning with `Optuna`
+* **Time-Series Analysis:** ACF (4-day autocorrelation), lag features
+* Engineered time features + lag variables
+* Engineered NOx conversion (ppm → g)
+* Modeling: `XGBoost`
+
 
 ### 📈 Results
 
@@ -49,9 +72,5 @@
 
 ---
 
-### Key Contributions
+### Web Service Demonstration
 
-* Built integrated dataset from multiple public sources
-* Engineered **time features + lag variables** for higher accuracy
-* Designed a **two-step model** (Flow → NOx)
-* Improved model performance through **per-unit optimization**
