@@ -58,6 +58,7 @@
 * **Time-Series Analysis:** ACF (4-day autocorrelation), lag features
 * Engineered time features + lag variables
 * Engineered NOx conversion (ppm → g)
+  * The original target was a percentage calulated with the amount of flow and NOx. So it's different 
 * Modeling: `XGBoost`
 
 
