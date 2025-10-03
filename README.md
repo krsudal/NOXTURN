@@ -81,7 +81,13 @@
 | 5    | 0.219   | 0.93 |
 | 6    | 0.282   | 0.92 |
 
+<img src="demo/Unknown-5.png" alt="figure1" width="300"/>
+<img src="demo/Unknown-6.png" alt="figure2" width="300"/>
+<img src="demo/Unknown-7.png" alt="figure3" width="300"/>
+<img src="demo/Unknown-8.png" alt="figure4" width="300"/>
+
 ---
 
 ### Web Service Demonstration
 
+<img src="demo/UI.png" alt="figure5" width="400"/>
