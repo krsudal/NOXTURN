@@ -7,27 +7,37 @@
 * The emission sources in the energy sector are clearly identifiable and can be directly regulated through policy.
 * Targeted power plant is planning to be equipped with a digital operating system, and has consistently been listed among the top NOx-emitting facilities.
 
-### Project Objective
-
-* Predict NOx emissions without internal sensored-data using only public external data
-* Provide a low-cost, practical model for plants
+### Project Objective & Expected Outcome
+ 
+* Provide a low-cost and practical model using only public external data without internal sensored-data
+* Develop a predictive system to forecast emissions and support proactive strategy formulation
+* Digitize and preserve the expertise of veteran operators in order to solve knowledge transfer difficulty due to high turnover among younger employees
+* Serve as a pilot tool for training new employees and for on-site validation
 
 ---
 
 ### Dataset
 
-* **KOEN:** Generation, operating hours, flow, NOx, O₂
-* **KPX:** National demand, plant-level trading volume
-* **KMA:** Temperature, humidity, wind (for missing values)
-
+* **Korea South-East Power Plant Data (KOEN)**
+  * Analyze NOx status and emission patterns
+  * Train model for NOx prediction
+  * Data Files: `Daily average ambient concentration`, `Daily average weather information`, `Daily average pollutant emissions`, `Hourly power generation records`
+  * Key Variables: `Power generation (MW)`, `Flow`, `O₂`, `Temperature`, `Humidity`, `Wind speed`, `Operating hours and idle hours`, `NOx`
+* **Korea Power Exchange Data**
+  * Estimate expected production contribution of Korea South-East Power plants compared to national electricity demand
+  * Use plant-level electricity trading volume data to evaluate contribution to the power market
+  * Data Files: `Hourly national electricity demand`, `Plant-level electricity trading volumes`
+  * Key Variables: `Hourly nationwide demand data`, `Monthly electricity trading volume by plant` 
+* **KMA:** `Temperature`, `humidity`, `wind` (for missing values)
+    
 ### Workload
 
-1. **Project Planning and Data Collection** 
+1. **Project Planning and Data Collection**
 
-   * Problem Definition & Research on Environmental Regulations and NOx Management
-   * Data Availability Assessment
-   * Data Collection
-   * Defining Data Requirements
+    * Project Goal & Problem Definition
+    * Research on Environmental Regulations and NOx Management
+    * Data Collection
+    * Defining Data Requirements
 
 2. **Data Preprocessing and Exploratory Data Analysis (EDA)**
 
@@ -56,20 +66,20 @@
 ### Key Contributions
 
 * **Time-Series Analysis:** ACF (4-day autocorrelation), lag features
-* Engineered time features + lag variables
-* Engineered NOx conversion (ppm → g)
-  * The original target was a percentage calulated with the amount of flow and NOx. So it's different 
-* Modeling: `XGBoost`
+* Convert NOx data in ppm to grams (g)
+  * `NOx (g) = NOx (ppm) × 1.308 × Flow / 1e-3`
+  * `O₂ (g) = O₂ (ppm) × 1.308 × Flow / 1e-3`
+* Modeling: `XGBoostRegressor`
 
 
 ### 📈 Results
 
-| Unit | RMSE (g) | R²   |
+| Unit |  RMSE  | R²   |
 | ---- | -------- | ---- |
-| 3    | 504.52   | 0.90 |
-| 4    | 492.65   | 0.85 |
-| 5    | 219.48   | 0.93 |
-| 6    | 282.72   | 0.92 |
+| 3    | 0.514   | 0.90 |
+| 4    | 1.264   | 0.85 |
+| 5    | 0.219   | 0.93 |
+| 6    | 0.282   | 0.92 |
 
 ---
 
